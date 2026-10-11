@@ -73,4 +73,83 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('48. deve calcular o dobro de um número', () => { expect(dobro(10)).toBe(20); });
   test('49. deve calcular o triplo de um número', () => { expect(triplo(10)).toBe(30); });
   test('50. deve calcular a metade de um número', () => { expect(metade(20)).toBe(10); });
+
+  describe('Casos de borda para matar mutantes', () => {
+    test('deve validar mensagens e limites das operações com erro', () => {
+      expect(() => divisao(5, 0)).toThrow('Divisão por zero não é permitida.');
+      expect(() => raizQuadrada(-1)).toThrow('Não é possível calcular a raiz quadrada de um número negativo.');
+      expect(() => fatorial(-1)).toThrow('Fatorial não é definido para números negativos.');
+      expect(() => maximoArray([])).toThrow('Array vazio не possui valor máximo.');
+      expect(() => minimoArray([])).toThrow('Array vazio не possui valor mínimo.');
+      expect(() => medianaArray([])).toThrow('Array vazio не possui mediana.');
+      expect(() => inverso(0)).toThrow('Não é possível inverter o número zero.');
+    });
+
+    test('deve tratar os valores-base e arrays vazios', () => {
+      expect(raizQuadrada(0)).toBe(0);
+      expect(fatorial(0)).toBe(1);
+      expect(fatorial(1)).toBe(1);
+      expect(mediaArray([])).toBe(0);
+      expect(somaArray([])).toBe(0);
+      expect(produtoArray([])).toBe(1);
+    });
+
+    test('deve cobrir resultados falsos das checagens', () => {
+      expect(isPar(3)).toBe(false);
+      expect(isImpar(4)).toBe(false);
+      expect(isPrimo(1)).toBe(false);
+      expect(isPrimo(9)).toBe(false);
+      expect(isDivisivel(10, 3)).toBe(false);
+      expect(isMaiorQue(5, 5)).toBe(false);
+      expect(isMenorQue(5, 5)).toBe(false);
+      expect(isEqual(5, 6)).toBe(false);
+    });
+
+    test('deve respeitar os limites do clamp', () => {
+      expect(clamp(-1, 0, 10)).toBe(0);
+      expect(clamp(11, 0, 10)).toBe(10);
+      expect(clamp(0, 0, 10)).toBe(0);
+      expect(clamp(10, 0, 10)).toBe(10);
+    });
+
+    test('deve calcular a mediana de arrays pares e não ordenados', () => {
+      expect(medianaArray([9, 1, 4, 2])).toBe(3);
+      expect(medianaArray([5, 1])).toBe(3);
+    });
+
+    test('deve cobrir entradas negativas e valores distintos', () => {
+      expect(soma(-2, -3)).toBe(-5);
+      expect(subtracao(2, 5)).toBe(-3);
+      expect(multiplicacao(-2, 3)).toBe(-6);
+      expect(divisao(-6, 2)).toBe(-3);
+      expect(potencia(2, 0)).toBe(1);
+      expect(restoDivisao(10, 2)).toBe(0);
+      expect(maximoArray([-3, -1, -2])).toBe(-1);
+      expect(minimoArray([-3, -1, -2])).toBe(-3);
+      expect(mediaArray([1, 2])).toBe(1.5);
+      expect(somaArray([-1, 2])).toBe(1);
+    });
+
+    test('deve cobrir os dois ramos do MDC, MMC e Fibonacci', () => {
+      expect(mdc(18, 12)).toBe(6);
+      expect(mdc(5, 10)).toBe(5);
+      expect(mmc(4, 6)).toBe(12);
+      expect(fibonacci(0)).toBe(0);
+      expect(fibonacci(1)).toBe(1);
+      expect(fibonacci(2)).toBe(1);
+    });
+
+    test('deve preservar entradas e validar conversões e arredondamentos', () => {
+      const numeros = [3, 1, 2];
+      expect(medianaArray(numeros)).toBe(2);
+      expect(numeros).toEqual([3, 1, 2]);
+      expect(arredondar(-1.5)).toBe(-1);
+      expect(arredondarParaBaixo(-1.2)).toBe(-2);
+      expect(arredondarParaCima(-1.8)).toBe(-1);
+      expect(celsiusParaFahrenheit(100)).toBe(212);
+      expect(fahrenheitParaCelsius(212)).toBe(100);
+      expect(grausParaRadianos(0)).toBe(0);
+      expect(radianosParaGraus(0)).toBe(0);
+    });
+  });
 });
